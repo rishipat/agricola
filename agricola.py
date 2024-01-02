@@ -2,6 +2,8 @@ from colorama import Fore, Style
 
 
 class AgricolaBoard:
+    """A class which stores the state of accumulation spots in agricola."""
+
     def __init__(self):
         self.available_resources = ["wood", "clay", "reed", "fish"]
         self.additional_resources = [
