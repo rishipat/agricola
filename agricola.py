@@ -40,7 +40,9 @@ class AgricolaBoard:
         for resource, amount in self.accumulation_spots.items():
             if resource in self.available_resources:
                 print(
-                    Fore.RED + f"\t{resource.capitalize()}: {amount}" + Style.RESET_ALL
+                    Fore.LIGHTBLUE_EX
+                    + f"\t{resource.capitalize()}: {amount}"
+                    + Style.RESET_ALL
                 )
 
     def prompt_new_resource(self) -> None:
@@ -80,7 +82,7 @@ class AgricolaBoard:
                 selected_resource = self.available_resources[int(choice) - 1]
                 self.accumulation_spots[selected_resource] = 0
                 print(
-                    Fore.YELLOW
+                    Fore.RED
                     + f"You took {selected_resource.capitalize()} and reset its counter to 0."
                     + Style.RESET_ALL
                 )
