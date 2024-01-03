@@ -34,6 +34,11 @@ class AgricolaBoard:
                 + Style.RESET_ALL
             )
 
+        for resource in self.additional_resources:
+            increment_amount = self.resource_increment[resource]
+            if self.round_number > 0 and self.accumulation_spots[resource] == 0:
+                self.accumulation_spots[resource] = increment_amount
+
     def display_accumulation_spots(self, stdscr):
         stdscr.clear()
         stdscr.addstr(f"Round: {self.round_number}\n")
@@ -108,6 +113,10 @@ class AgricolaBoard:
         else:
             self.prompt_new_resource()
             return "next_round"  # Increment round after adding resources
+import curses
+from colorama import Fore, Style
+
+# Your AgricolaBoard class and other methods remain the same
 
 import curses
 from colorama import Fore, Style
@@ -167,7 +176,7 @@ def main(stdscr):
                 elif 1 <= choice <= len(board.additional_resources):
                     selected_resource = board.additional_resources[choice - 1]
                     board.available_resources.append(selected_resource)
-                    board.accumulation_spots[selected_resource] = 0
+                    board.resource_increment[selected_resource] = 1  # Set the default increment for the new resource
                     stdscr.addstr(f"\n{selected_resource.capitalize()} added.\n")
                     stdscr.refresh()
                     break
@@ -177,10 +186,3 @@ def main(stdscr):
 
 if __name__ == "__main__":
     curses.wrapper(main)
-
-
-
-
-
-
-
