@@ -1,6 +1,7 @@
 from colorama import Fore, Style
 import curses
 
+
 class AgricolaBoard:
     """A class which stores the state of accumulation spots in agricola."""
 
@@ -47,9 +48,11 @@ class AgricolaBoard:
             if resource in self.available_resources:
                 stdscr.addstr(
                     f"\t{resource.capitalize()}: {amount}\n",
-                    curses.color_pair(1) | curses.A_BOLD
+                    curses.color_pair(1) | curses.A_BOLD,
                 )
-        stdscr.addstr("\nPress 'Enter' to advance to the next round, 't' to take a resource, or 'q' to quit: ")
+        stdscr.addstr(
+            "\nPress 'Enter' to advance to the next round, 't' to take a resource, or 'q' to quit: "
+        )
         stdscr.refresh()
 
     def prompt_new_resource(self) -> None:
@@ -113,15 +116,6 @@ class AgricolaBoard:
         else:
             self.prompt_new_resource()
             return "next_round"  # Increment round after adding resources
-import curses
-from colorama import Fore, Style
-
-# Your AgricolaBoard class and other methods remain the same
-
-import curses
-from colorama import Fore, Style
-
-# Your AgricolaBoard class and other methods remain the same
 
 def main(stdscr):
     curses.start_color()
@@ -132,22 +126,23 @@ def main(stdscr):
     while True:
         stdscr.clear()
         board.display_accumulation_spots(stdscr)
-        stdscr.addstr("\nPress 'q' to quit, 't' to take a resource, 'Enter' to add resources: ")
         stdscr.refresh()
         input_text = stdscr.getch()
 
-        if input_text == ord('q'):
+        if input_text == ord("q"):
             break
-        elif input_text == ord('t'):
+        elif input_text == ord("t"):
             stdscr.clear()
             stdscr.addstr("Select a resource to take:\n")
             for index, res in enumerate(board.available_resources, start=1):
                 stdscr.addstr(f"{index}. {res.capitalize()}\n")
-            stdscr.addstr("Enter the number of the resource to take (or 'done' if none): ")
+            stdscr.addstr(
+                "Enter the number of the resource to take (or 'done' if none): "
+            )
             stdscr.refresh()
             while True:
-                choice = stdscr.getch() - ord('0')
-                if choice == ord('d') - ord('0'):
+                choice = stdscr.getch() - ord("0")
+                if choice == ord("d") - ord("0"):
                     break
                 elif 1 <= choice <= len(board.available_resources):
                     selected_resource = board.available_resources[choice - 1]
@@ -158,7 +153,9 @@ def main(stdscr):
                     stdscr.refresh()
                     break
                 else:
-                    stdscr.addstr("\nInvalid input. Please enter a valid number or 'done'.\n")
+                    stdscr.addstr(
+                        "\nInvalid input. Please enter a valid number or 'done'.\n"
+                    )
                     stdscr.refresh()
         elif input_text == curses.KEY_ENTER or input_text == 10:  # Enter key
             board.round_number += 1
@@ -170,19 +167,24 @@ def main(stdscr):
             stdscr.addstr("Enter the number of the resource to add (or 'd' if done): ")
             stdscr.refresh()
             while True:
-                choice = stdscr.getch() - ord('0')
-                if choice == ord('d') - ord('0'):
+                choice = stdscr.getch() - ord("0")
+                if choice == ord("d") - ord("0"):
                     break
                 elif 1 <= choice <= len(board.additional_resources):
                     selected_resource = board.additional_resources[choice - 1]
                     board.available_resources.append(selected_resource)
-                    board.resource_increment[selected_resource] = 1  # Set the default increment for the new resource
+                    board.resource_increment[
+                        selected_resource
+                    ] = 1  # Set the default increment for the new resource
                     stdscr.addstr(f"\n{selected_resource.capitalize()} added.\n")
                     stdscr.refresh()
                     break
                 else:
-                    stdscr.addstr("\nInvalid input. Please enter a valid number or 'done'.\n")
+                    stdscr.addstr(
+                        "\nInvalid input. Please enter a valid number or 'done'.\n"
+                    )
                     stdscr.refresh()
+
 
 if __name__ == "__main__":
     curses.wrapper(main)
