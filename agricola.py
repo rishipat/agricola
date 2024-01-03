@@ -117,6 +117,7 @@ class AgricolaBoard:
             self.prompt_new_resource()
             return "next_round"  # Increment round after adding resources
 
+
 def main(stdscr):
     curses.start_color()
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
