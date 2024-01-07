@@ -4,52 +4,38 @@
 ////
 ////  Created by Rishi Patel on 1/7/24.
 ////
-//
-//import SwiftUI
-//
-//struct ContentView: View {
-//    var body: some View {
-//        VStack {
-//            Image(systemName: "globe")
-//                .imageScale(.large)
-//                .foregroundStyle(.tint)
-//            Text("Hello, world!")
-//        }
-//        .padding()
-//    }
-//}
-//
-//#Preview {
-//    ContentView()
-//}
+
 import SwiftUI
 
 struct ContentView: View {
-    @State private var count :Int = 1
+//    @State private var count :Int = 1
+    @State private var resources: [String: Int] = [
+        "Wood": 0,
+        "Stone": 0,
+        "Food": 0
+    ]
     
     var body: some View {
         VStack {
             
-            Text("Wood")
+            Text("Wood").font(.title)
             
             Button(action: {
-                count = 0
+                resources["Wood"]? = 0
             }) {
-                Text("\(count)")
+                Text("\(resources["Wood"]!)")
                     .font(.title)
                     .padding()
+                    .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/,height: 50)
                     .foregroundColor(.white)
-                    .background(Color.cyan)
+                    .background(Color.brown)
                     .cornerRadius(20)
             }
             
-//            Button(action: {count -= 1}) {
-//                Text("test")
-//            }
             Spacer()
             
             Button(action: {
-                count += 1 // Incrementing count for "Next Round"
+                resources["Wood"]? += 1 // Incrementing count for "Next Round"
             }) {
                 Text("Next Round")
                     .font(.headline)
