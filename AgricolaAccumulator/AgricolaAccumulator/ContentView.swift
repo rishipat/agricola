@@ -1,41 +1,49 @@
-////
-////  ContentView.swift
-////  AgricolaAccumulator
-////
-////  Created by Rishi Patel on 1/7/24.
-////
+//
+//  ContentView.swift
+//  AgricolaAccumulator
+//
+//  Created by Rishi Patel on 1/7/24.
+//
 
 import SwiftUI
 
 struct ContentView: View {
-//    @State private var count :Int = 1
     @State private var resources: [String: Int] = [
         "Wood": 0,
         "Stone": 0,
-        "Food": 0
+        "Fish": 0
     ]
     
     var body: some View {
         VStack {
-            
-            Text("Wood").font(.title)
-            
-            Button(action: {
-                resources["Wood"]? = 0
-            }) {
-                Text("\(resources["Wood"]!)")
-                    .font(.title)
-                    .padding()
-                    .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/,height: 50)
-                    .foregroundColor(.white)
-                    .background(Color.brown)
-                    .cornerRadius(20)
+            ForEach(resources.sorted(by: <), id: \.key) { resource, quantity in
+                Text(resource).font(.title)
+                
+                Button(action: {
+                    resources[resource]? = 0
+                }) {
+                    Text("\(resources[resource]!)")
+                        .font(.title)
+                        .padding()
+                        .frame(width: /*@START_MENU_TOKEN@*/100/*@END_MENU_TOKEN@*/,height: 50)
+                        .foregroundColor(.white)
+                        .background(Color.blue)
+                        .cornerRadius(20)
+                }
+                
+                Spacer()
             }
             
-            Spacer()
-            
             Button(action: {
-                resources["Wood"]? += 1 // Incrementing count for "Next Round"
+                for resource in resources.keys {
+                    if resource == "Wood"{
+                        resources[resource]? += 3
+                    }
+                    else{
+                        resources[resource]? += 1
+                    }
+                    
+                }
             }) {
                 Text("Next Round")
                     .font(.headline)
