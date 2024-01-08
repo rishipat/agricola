@@ -27,8 +27,14 @@ struct ContentView: View {
     @State private var round: Int = 0
     
     var body: some View {
+        
         HStack(spacing: 10) {
+            // The left side shows new resources to select from, if available.
             VStack(alignment: .leading, spacing: 20) {
+                
+                
+                Spacer()
+                
                 ForEach(0..<newResources.count, id: \.self) { index in
                     Button(action: {
                         guard index < newResources.count else { return }
@@ -81,6 +87,10 @@ struct ContentView: View {
             Divider()
             // On the right side we show the current resources and counts. Pressing the button resets the corresponding resource to 0.
             VStack {
+                
+                
+                Spacer()
+                
                 ForEach(resources.sorted(by: <), id: \.key) { resource, quantity in
                     Text(resource)
                         .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
