@@ -26,9 +26,11 @@ struct ContentView: View {
     
     @State private var round: Int = 0
     
-    @State private var prev_round: Int = 0
-    @State private var prev_resources: [String: Int] = [:]
-    @State private var prev_newResources: [String] = []
+    @State private var history_round: [Int] = []
+    @State private var history_resources: [[String: Int]] = [[:]]
+    @State private var history_newResources: [[String]] = []
+    
+    private let maxUndo: Int = 100
     
     var body: some View {
         
@@ -58,10 +60,7 @@ struct ContentView: View {
                 Spacer()
                 
                 Button(action: {
-                    round = prev_round
-                    newResources = prev_newResources
-                    resources = prev_resources
-                    //                    saveState()
+                    undo()
                 }) {
                     Text("Undo")
                         .foregroundColor(.white)
@@ -120,7 +119,6 @@ struct ContentView: View {
                     Button(action: {
                         saveState()
                         resources[resource]? = 0
-                        print("test")
                     }) {
                         Text("\(resources[resource]!)")
                             .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
@@ -138,13 +136,7 @@ struct ContentView: View {
                 
                 Button(action: {
                     saveState()
-                    for resource in resources.keys {
-                        if resource == "Wood" {
-                            resources[resource]? += 3
-                        } else {
-                            resources[resource]? += 1
-                        }
-                    }
+                    incrementResources()
                     round += 1
                 }) {
                     Text("Next Round")
@@ -161,10 +153,33 @@ struct ContentView: View {
     }
     
     private func saveState() {
-        prev_resources = resources
-        prev_newResources = newResources
-        prev_round = round
-        print("state saved")
+        if history_round.count == maxUndo {
+            history_round.removeFirst()
+            history_resources.removeFirst()
+            history_newResources.removeFirst()
+        }
+        
+        history_round.append(round)
+        history_resources.append(resources)
+        history_newResources.append(newResources)
+    }
+    
+    private func undo() {
+        if history_round.count > 0 {
+            round = history_round.popLast()!
+            resources = history_resources.popLast()!
+            newResources = history_newResources.popLast()!}
+    }
+    
+    private func incrementResources() {
+        for resource in resources.keys {
+            // Default resource increment rules.
+            if resource == "Wood" {
+                resources[resource]? += 3
+            } else {
+                resources[resource]? += 1
+            }
+        }
     }
 }
 
