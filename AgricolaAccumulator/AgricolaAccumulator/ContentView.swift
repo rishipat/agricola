@@ -26,6 +26,12 @@ struct ContentView: View {
     
     @State private var round: Int = 0
     
+    @State private var history_round: [Int] = []
+    @State private var history_resources: [[String: Int]] = [[:]]
+    @State private var history_newResources: [[String]] = []
+    
+    private let maxUndo: Int = 100
+    
     var body: some View {
         
         HStack(spacing: 10) {
@@ -37,6 +43,7 @@ struct ContentView: View {
                 
                 ForEach(0..<newResources.count, id: \.self) { index in
                     Button(action: {
+                        saveState()
                         guard index < newResources.count else { return }
                         let selectedResource = newResources.remove(at: index)
                         resources[selectedResource] = 0
@@ -51,8 +58,23 @@ struct ContentView: View {
                 }
                 
                 Spacer()
+                
+                Button(action: {
+                    undo()
+                }) {
+                    Text("Undo")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.brown)
+                        .cornerRadius(10)
+                    
+                }
+                
+                Spacer()
                 // Provide a reset button to restore to init. state.
                 Button(action: {
+                    saveState()
                     round = 0
                     newResources = [
                         "Cattle",
@@ -69,7 +91,6 @@ struct ContentView: View {
                         "Reed": 0,
                         "Fish": 0
                     ]
-                    
                     
                     
                 }) {
@@ -96,6 +117,7 @@ struct ContentView: View {
                         .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
                     
                     Button(action: {
+                        saveState()
                         resources[resource]? = 0
                     }) {
                         Text("\(resources[resource]!)")
@@ -113,15 +135,9 @@ struct ContentView: View {
                 Text("Round # \(round)")
                 
                 Button(action: {
-                    for resource in resources.keys {
-                        if resource == "Wood" {
-                            resources[resource]? += 3
-                        } else {
-                            resources[resource]? += 1
-                        }
-                    }
+                    saveState()
+                    incrementResources()
                     round += 1
-                    
                 }) {
                     Text("Next Round")
                         .font(.headline)
@@ -134,6 +150,36 @@ struct ContentView: View {
             .frame(maxWidth: .infinity)
         }
         .padding()
+    }
+    
+    private func saveState() {
+        if history_round.count == maxUndo {
+            history_round.removeFirst()
+            history_resources.removeFirst()
+            history_newResources.removeFirst()
+        }
+        
+        history_round.append(round)
+        history_resources.append(resources)
+        history_newResources.append(newResources)
+    }
+    
+    private func undo() {
+        if history_round.count > 0 {
+            round = history_round.popLast()!
+            resources = history_resources.popLast()!
+            newResources = history_newResources.popLast()!}
+    }
+    
+    private func incrementResources() {
+        for resource in resources.keys {
+            // Default resource increment rules.
+            if resource == "Wood" {
+                resources[resource]? += 3
+            } else {
+                resources[resource]? += 1
+            }
+        }
     }
 }
 
